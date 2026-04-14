@@ -1,0 +1,20 @@
+# Carpetas innecesarias para la imagen
+node_modules
+dist
+.tmp
+.git
+.gitignore
+
+# Archivos del sistema y editor
+Dockerfile
+docker-compose.yml
+.dockerignore
+.vscode
+*.log
+*.swp
+*.swo
+*.DS_Store
+
+# Archivos de entorno
+.env
+.env.*

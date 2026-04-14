@@ -1,0 +1,107 @@
+<p-toast></p-toast>
+<app-spinner></app-spinner>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar>
+                <div class="col-12">
+                    <div class="flex flex-wrap">
+                        <div class="flex flex-column mr-1">
+                            <label>Fecha</label>
+                            <p-calendar appendTo="body"
+                                style="width: 80px;"
+                                dateFormat="yy-mm-dd"
+                                [panelStyle]="{'width':'25%'}"
+                                [showButtonBar]="true"
+                                    [(ngModel)]="form_filterG_model_fecha_de"
+                            ></p-calendar>
+                        </div>
+                        <div class="flex flex-column mr-1">
+                            <label>Usuarios</label>
+                            <p-dropdown
+                                [options]="form_filterG_options_usuario"
+                                optionLabel="d"
+                                [(ngModel)]="form_filterG_model_usuario"
+                                optionValue="i"
+                                placeholder="Selecciona Usuario"
+                                appendTo="body"
+                                [filter]="true"
+                                filterBy="d" 
+                                [showClear]="true"
+                                [disabled]="form_filterG_model_fecha_de &&
+                                form_filterG_model_fecha_de != '' ? false : true"
+
+                            ></p-dropdown>
+                        </div>
+                        <div class="flex flex-column md:flex-row md:justify-content-start md:align-items-center mr-1">
+                            <p-button
+                                label="Filtrar" icon="pi pi-filter"
+                                [disabled]="form_filterG_model_fecha_de &&
+                                form_filterG_model_fecha_de != '' && form_filterG_model_usuario && form_filterG_model_usuario != 0 ? false : true"
+                                (click)="refreshTables()"
+                            ></p-button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tablas  -->
+                <div class="p-fluid grid font-bold col-12">
+                    <div class="field col-6">
+                        <p-table
+                            [value]="data_reporte_ruta"
+                            [resizableColumns]="true"
+                            [tableStyle]="{ 'min-width': '20rem' }"
+                            styleClass="p-datatable-gridlines p-datatable-sm"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Promotor</th>
+                                    <th>Registros realizados</th>
+                                    <th>Abrio</th>
+                                    <th>No abrio</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-data>
+                                <tr>
+                                    <td>{{data.hora}}</td>
+                                    <td>{{data.nombre}}</td>
+                                    <td>{{data.total}}</td>
+                                    <td>{{data.abiertos}}</td>
+                                    <td>{{data.no_abiertos}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <!-- <div class="col-1">
+                        <p-divider layout="vertical"></p-divider>
+                    </div> -->
+                    <div class="field col-6">
+                        <p-table
+                            [value]="data_reporte_fecha"
+                            [resizableColumns]="true"
+                            [tableStyle]="{ 'min-width': '20rem' }"
+                            styleClass="p-datatable-gridlines p-datatable-sm"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Promotor</th>
+                                    <th>Total realizados</th>
+                                    <th>Abrio</th>
+                                    <th>No abrio</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-data_1>
+                                <tr>
+                                     <td>{{data_1.nombre}}</td>
+                                     <td>{{data_1.total}}</td>
+                                     <td>{{data_1.abiertos}}</td>
+                                     <td>{{data_1.no_abiertos}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-toolbar>
+        </div>
+    </div>
+</div>

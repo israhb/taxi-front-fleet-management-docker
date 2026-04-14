@@ -1,0 +1,154 @@
+<p-toast></p-toast>
+<app-spinner></app-spinner>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar>
+                <div class="p-toolbar-group-start">
+                    <div class="flex flex-column mr-1">
+                        <label>Region</label>
+                        <p-dropdown
+                            [showClear]="true"
+                            [options]="form_filterG_option_region"
+                            optionLabel="d"
+                            [(ngModel)]="form_filterG_model_region"
+                            optionValue="i"
+                            placeholder="Selecciona Region"
+                            appendTo="body"
+                            (onChange)="selectedCombo(0)"
+
+                        ></p-dropdown>
+                    </div>
+                    <div class="flex flex-column mr-1">
+                        <label>Gerencia</label>
+                        <p-dropdown
+                            [showClear]="true"
+                            [options]="form_filterG_option_gerencia"
+                            optionLabel="d"
+                            [(ngModel)]="form_filterG_model_gerencia"
+                            optionValue="i"
+                            placeholder="Selecciona Gerencia"
+                            appendTo="body"
+                            [disabled]="form_filterG_model_region ? false : true"
+                            (onChange)="selectedCombo(1)"
+
+                        ></p-dropdown>
+                    </div>
+                    <div class="flex flex-column mr-1">
+                        <label>Cedis</label>
+                        <p-dropdown
+                            [showClear]="true"
+                            [options]="form_filterG_option_cedi"
+                            optionLabel="d"
+                            [(ngModel)]="form_filterG_model_cedi"
+                            optionValue="i"
+                            placeholder="Selecciona Cedi"
+                            appendTo="body"
+                            [disabled]="form_filterG_model_gerencia &&
+                            form_filterG_model_gerencia != -1 ? false : true"
+                            (onChange)="selectedCombo(2)"
+
+                        ></p-dropdown>
+                    </div>
+                    <div class="flex flex-column mr-1">
+                        <label>Fecha</label>
+                        <p-calendar
+                            class="mr-2"
+                            [(ngModel)]="filter_model_date"
+                            (onSelect)="selectedCombo(2)"
+                            [showIcon]="true" dateFormat="yy-mm-dd"
+                            placeholder="Selecione Fecha"
+                        >
+                        </p-calendar>
+                    </div>
+                    <div class="flex flex-column mr-1">
+                        <label>Usuarios</label>
+                        <p-dropdown
+                            class="mr-2"
+                             [options]="filter_options_users"
+                            [(ngModel)]="filter_model_users"
+                            optionLabel="d" optionValue="i"
+                            [filter]="true" filterBy="d"
+                            placeholder="Selecciona Usuarios"
+                            [disabled]="form_filterG_model_cedi &&
+                            form_filterG_model_cedi != -1 ? false : true"
+                        >
+                        </p-dropdown>
+                    </div>
+                    <p-button label="Filtrar" icon="pi pi-map-marker"
+                        (onClick)="filtrar()"
+                    ></p-button>
+                </div>
+            </p-toolbar>
+            <div class="col-12" id="map">
+                <google-map
+                    height="500px"
+                    width="100%"
+                    [center]="center"
+                    [zoom]="zoom"
+                >
+                @if (markersApi.length > 0) {
+                    <map-marker
+                        #marker="mapMarker"
+                        *ngFor="let data of markersApi"
+                        [position]="data.position"
+                        (mapClick)="onMarkerClick(data, marker)">
+                    </map-marker>
+                    <map-info-window>
+                        <div style="white-space: pre-wrap;">
+                            {{data_info_user}}
+                            <div *ngIf="image_marker">
+                                <img [src]="image_marker" alt="Imagen del marcador" style="width: 100px; height: auto; margin-top: 5px;">
+                            </div>
+                        </div>
+                    </map-info-window>
+                }
+                @if (heatmapData.length > 0) {
+                    <!-- <map-heatmap-layer [data]="heatmapData" [options]="heatmapOptions" /> -->
+
+                    @if (markerPositions_1) {
+                        @for (position of markerPositions_1; track $index) {
+                            <map-marker
+                            #marker="mapMarker"
+                                [position]="position" [options]="markerOptions_1"
+                                (mapMouseover)="openInfoWindow(marker, 0, true)"
+                                />
+                        }
+                    }
+                    @if (markerPositions_2) {
+                        @for (position of markerPositions_2; track $index) {
+                            <map-marker
+                            #marker="mapMarker"
+                                [position]="position" [options]="markerOptions_2"
+                                (mapMouseover)="openInfoWindow(marker, 1, true)"
+                                />
+                        }
+                    }
+                    <map-info-window>
+                        <div style="white-space: pre-wrap;">
+                            {{data_info_user}}
+                        </div>
+                    </map-info-window>
+
+                    <!-- generales -->
+                    <!-- <map-polyline [path]="heatmapData" />
+                    @for (item of heatmapData; track $index) {
+                        <map-marker [position]="item" [options]="markerOptions"
+                        #marker="mapMarker"  (mapMouseover)="openInfoWindow(marker, $index, false)" />
+
+                    } -->
+                    <map-polyline [path]="heatmapData" />
+                    @for (marker of markersApi; track $index) {
+                        <map-marker
+                            [position]="marker.position"
+                            [options]="marker.options"
+                             #markerRef="mapMarker"
+                            (mapClick)="onMarkerClick(marker, markerRef)">
+                        </map-marker>
+                    }
+                }
+                </google-map>
+            </div>
+        </div>
+    </div>
+</div>

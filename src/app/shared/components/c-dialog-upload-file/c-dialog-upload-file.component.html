@@ -1,0 +1,29 @@
+<p-dialog [(visible)]="modalUploadFile"
+    [style]="{ width: '400px' }" [modal]="true" class="p-fluid">
+    <p-header>
+      <i class="pi pi-upload font-bold mr-2" style="font-size: 1.2rem"></i>
+      <span>{{model_data_title}}</span>
+    </p-header>
+    <ng-template pTemplate="content">
+        <p-messages [(value)]="messageArray" [enableService]="false" [closable]="false"></p-messages>
+        <div class="p-fluid p-formgrid grid font-boldjustify-content-center align-items-center">
+            <div class="field col-12">
+                <label>Archivo</label>
+                <p-fileUpload
+                name="frm_ini_xls"
+                mode="basic"
+                chooseLabel="Selecciona Archivo"
+                (onSelect)="onFileSelect($event.files[0])"
+                    customUpload="false"
+                    accept=".csv"
+                ></p-fileUpload>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" [outlined]="true" severity="secondary"
+            (click)="clouseModal()"
+        ></p-button>
+      <button pButton label="Cargar" icon="pi pi-upload" (click)="setFileReturn()"></button>
+    </ng-template>
+  </p-dialog>

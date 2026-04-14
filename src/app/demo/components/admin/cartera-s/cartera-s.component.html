@@ -1,0 +1,508 @@
+<p-toast></p-toast>
+<app-spinner></app-spinner>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+
+            <!-- <div>
+                <h2>Editor de Imágenes</h2>
+                <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+                <br /><br />
+                <button (click)="changeEyeColor('blue')">Cambiar color de ojos a azul</button>
+                <button (click)="changeEyeColor('green')">Cambiar color de ojos a verde</button>
+                <button (click)="changeEyeColor('brown')">Cambiar color de ojos a marrón</button>
+                </div>
+    
+                <div *ngIf="resultImageUrl">
+                <h3>Imagen modificada:</h3>
+                <img [src]="resultImageUrl" alt="Imagen modificada" style="max-width: 100%;" />
+                </div>
+    
+                <div *ngIf="errorMessage" style="color: red;">
+                {{ errorMessage }}
+            </div> -->
+
+            <p-blockUI [blocked]="blockedDocument" />
+            <p-table
+                #dt
+                [value]="carteras"
+                dataKey="numeracion"  selectionMode="multiple" [resizableColumns]="true"
+                [tableStyle]="{ 'min-width': '20rem' }"
+                styleClass="p-datatable-gridlines p-datatable-sm"
+            >
+                <ng-template pTemplate="caption">
+                    <div>
+
+                        <div class="flex flex-wrap">
+                            <div class="flex flex-column mr-1">
+                                <label>Region</label>
+                                <p-dropdown
+                                    [showClear]="true"
+                                    [options]="form_filterG_option_region"
+                                    optionLabel="d"
+                                    [(ngModel)]="form_filterG_model_region"
+                                    optionValue="i"
+                                    placeholder="Selecciona Region"
+                                    appendTo="body"
+                                    (onChange)="selectedCombo(0)"
+
+                                ></p-dropdown>
+                            </div>
+                            <div class="flex flex-column mr-1">
+                                <label>Gerencia</label>
+                                <p-dropdown
+                                    [showClear]="true"
+                                    [options]="form_filterG_option_gerencia"
+                                    optionLabel="d"
+                                    [(ngModel)]="form_filterG_model_gerencia"
+                                    optionValue="i"
+                                    placeholder="Selecciona Gerencia"
+                                    appendTo="body"
+                                    [disabled]="form_filterG_model_region ? false : true"
+                                    (onChange)="selectedCombo(1)"
+
+                                ></p-dropdown>
+                            </div>
+                            <div class="flex flex-column mr-1">
+                                <label>Cedis</label>
+                                <p-dropdown
+                                    [showClear]="true"
+                                    [options]="form_filterG_option_cedi"
+                                    optionLabel="d"
+                                    [(ngModel)]="form_filterG_model_cedi"
+                                    optionValue="i"
+                                    placeholder="Selecciona Cedi"
+                                    appendTo="body"
+                                    [disabled]="form_filterG_model_gerencia &&
+                                    form_filterG_model_gerencia != -1 ? false : true"
+                                    (onChange)="selectedCombo(2)"
+
+                                ></p-dropdown>
+                            </div>
+                            <div class="flex flex-column mr-1">
+                                <label>Rutas</label>
+                                <p-multiSelect
+                                    [options]="form_filterG_option_rutas"
+                                    optionLabel="d"
+                                    [(ngModel)]="form_filterG_model_rutas"
+                                    optionValue="i"
+                                    placeholder="Selecciona Cedi"
+                                    appendTo="body"
+                                    [disabled]="form_filterG_model_cedi &&
+                                    form_filterG_model_cedi != -1 ? false : true"
+
+                                ></p-multiSelect>
+                            </div>
+                            <div class="flex flex-column md:flex-row md:justify-content-start md:align-items-center mr-1">
+                                <p-splitButton label="Filtrar" icon="pi pi-filter"
+                                    (onClick)="runFilterGeneric()" [model]="items"
+                                ></p-splitButton>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr class="text-sm">
+                        <th>#</th>
+                        <th>Id</th>
+                        <th >Cedi</th>
+                        <th >Ruta Preventa</th>
+                        <th >Ruta Entrega</th>
+                        <th >Tipo</th>
+                        <th>Estatus</th>
+                        <th >Nombre Negocio</th>
+                        <th >NUD</th>
+                        <th >Calle</th>
+                        <th >Colonia</th>
+                        <th >Semanal</th>
+                        <th >Latitud</th>
+                        <th >Longitud</th>
+                        <th >Fusionado</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-cartera >
+                    <tr class="text-sm" >
+                        <td>
+                            {{cartera.numeracion}}
+                        </td>
+                        <td>
+                            {{cartera.car_id}}
+                        </td>
+                        <td>
+                            {{cartera.car_cds}}
+                        </td>
+                        <td>
+                            {{cartera.car_rt_prev}}
+                        </td>
+                        <td>
+                            {{cartera.car_rt_ent}}
+                        </td>
+                        <td>
+                            {{cartera.car_tipo}}
+                        </td>
+                        <td>
+                            {{cartera.car_val_status}}
+                        </td>
+                        <td >
+                            {{cartera.car_nombre_negocio}}
+                        </td>
+                        <td >
+                            {{cartera.car_NUD}}
+                        </td>
+                        <td>
+                            {{cartera.car_calle}}
+                        </td>
+                        <td>
+                            {{cartera.car_col}}
+                        </td>
+                        <td >
+                            {{cartera.car_semanal}}
+                        </td>
+                        <td >
+                            {{cartera.car_coord_x}}
+                        </td>
+                        <td >
+                            {{cartera.car_coord_y}}
+                        </td>
+                        <td >
+                            {{cartera.car_fusionado}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div class="flex justify-content-start">
+                <div class="col-2">
+                    <button pButton icon="pi pi-refresh"
+                    styleClass="p-button-sm" class="p-button-help p-button-sm"
+                        pTooltip="Refresh"  (click)="runFilterGeneric()"
+                        ooltipPosition="bottom">
+                    </button>
+                </div>
+                <p-paginator
+                    (onPageChange)="onPageChange($event)"
+                    [showCurrentPageReport]="true"
+                    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+                    [first]="first" [rows]="rows"
+                    [totalRecords]="totalRecords" [rows]="15"
+                    [rowsPerPageOptions]="[15, 20, 30, 40, 50, 100]"
+                ></p-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Overlay para mostrar mpara en la tabla -->
+<p-overlayPanel #op [showCloseIcon]="true" appendTo="body"
+    [style]="{width: '450px', 'max-width': '80%'}">
+    <ng-template pTemplate>
+        <google-map  [center]="center"
+        [zoom]="zoom" width="450" height="300" >
+            <map-marker *ngIf="marker"
+                [position]="marker.position"
+            >
+            </map-marker>
+        </google-map>
+    </ng-template>
+</p-overlayPanel>
+<!-- Overlay para mostrar mpara en la tabla -->
+
+<!-- Filtro por Cedi -->
+<p-dialog [(visible)]="modalFiltrosG"
+    [style]="{ width: '400px' }" [modal]="true" class="p-fluid">
+    <p-header>
+      <i class="pi pi-filter font-bold mr-2" style="font-size: 1.2rem"></i>
+      <span>Filtros</span>
+    </p-header>
+    <ng-template pTemplate="content">
+      <div class="p-fluid p-formgrid grid font-bold">
+        <div class="field col-6">
+            <label>Region</label>
+            <p-dropdown
+                [showClear]="true"
+                [options]="form_filterG_option_region"
+                optionLabel="d"
+                [(ngModel)]="form_filterG_model_region"
+                optionValue="i"
+                placeholder="Selecciona Region"
+                appendTo="body"
+                (onChange)="selectedCombo(0)"
+            ></p-dropdown>
+        </div>
+        <div class="field col-6">
+            <label>Gerencia</label>
+            <p-dropdown
+                [showClear]="true"
+                [options]="form_filterG_option_gerencia"
+                optionLabel="d"
+                [(ngModel)]="form_filterG_model_gerencia"
+                optionValue="i"
+                placeholder="Selecciona Gerencia"
+                appendTo="body"
+                [disabled]="form_filterG_model_region ? false : true"
+                (onChange)="selectedCombo(1)"
+            ></p-dropdown>
+        </div>
+        <div class="field col-6">
+            <label>Cedi</label>
+            <p-dropdown
+                [showClear]="true"
+                [options]="form_filterG_option_cedi"
+                optionLabel="d"
+                [(ngModel)]="form_filterG_model_cedi"
+                optionValue="i"
+                placeholder="Selecciona Cedi"
+                appendTo="body"
+                [disabled]="form_filterG_model_gerencia &&
+                form_filterG_model_gerencia != -1 ? false : true"
+                (onChange)="selectedCombo(2)"
+            ></p-dropdown>
+        </div>
+        <div class="field col-6">
+            <label>Ruta</label>
+            <p-multiSelect
+                [options]="form_filterG_option_rutas"
+                optionLabel="d"
+                [(ngModel)]="form_filterG_model_rutas"
+                optionValue="i"
+                placeholder="Selecciona Cedi"
+                appendTo="body"
+                [disabled]="form_filterG_model_cedi &&
+                form_filterG_model_cedi != -1 ? false : true"
+            ></p-multiSelect>
+        </div>
+        <div class="field col-12">
+            <label>Tipo Carga</label>
+            <p-dropdown
+                [showClear]="true"
+                [options]="form_filterG_option_carga"
+                optionLabel="d"
+                [(ngModel)]="form_filterG_model_carga"
+                optionValue="i"
+                placeholder="Selecciona Carga"
+                appendTo="body"
+            ></p-dropdown>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" [outlined]="true" severity="secondary"
+            (click)="modalFiltrosG = false"
+        ></p-button>
+        <button
+            pButton label="Filtrar" icon="pi pi-filter"
+            (click)="runFilterGeneric()"
+        ></button>
+    </ng-template>
+  </p-dialog>
+<!-- Filtros por Cedi -->
+<!--cargar diaria y semanal -->
+<div class="col-12" *ngIf="modalCargarDiaria">
+    <app-c-dialog-upload-file
+        [modalUploadFile]="modalCargarDiaria"
+        [model_data_title]="flag_semanal_diaria_title"
+        [messageArray]="messages"
+        (flagClouseModalEvent)="clouseModalUploadFile($event)"
+        (flagSuccessFileEvent)="getSuccesModalUpload($event)"
+        (fileReturnEvent)="getFileData($event)"
+    >
+    </app-c-dialog-upload-file>
+</div>
+
+<!-- Cierre de Dia -->
+<p-dialog [(visible)]="modalCierreDia"
+    [style]="{ width: '500px' }" [modal]="true" class="p-fluid">
+    <p-header>
+      <i class="pi pi-lock font-bold mr-2" style="font-size: 1.2rem"></i>
+      <span>Subir Semanal</span>
+    </p-header>
+    <ng-template pTemplate="content">
+        <p-messages [(value)]="messagesCierre" [enableService]="false" [closable]="false"></p-messages>
+      <div class="p-fluid p-formgrid grid font-bold">
+        <div class="field col-6">
+            <label>Region</label>
+            <p-dropdown
+                [options]="form_cierre_option_region"
+                optionLabel="d"
+                [(ngModel)]="form_cierre_model_region"
+                optionValue="i"
+                placeholder="Selecciona Region"
+                appendTo="body"
+                (onChange)="selectedComboCierre(0)"
+                class="{{flagSumbit && !form_cierre_model_region
+                ? 'ng-invalid ng-dirty' : ''}}"
+            ></p-dropdown>
+            <small class="p-error" *ngIf="flagSumbit && !form_cierre_model_region">Campo requerido.</small>
+        </div>
+        <div class="field col-6">
+            <label>Gerencia</label>
+            <p-dropdown
+                [options]="form_cierre_option_gerencia"
+                optionLabel="d"
+                [(ngModel)]="form_cierre_model_gerencia"
+                optionValue="i"
+                placeholder="Selecciona Gerencia"
+                appendTo="body"
+                [disabled]="form_cierre_model_region ? false : true"
+                (onChange)="selectedComboCierre(1)"
+                class="{{flagSumbit && !form_cierre_model_gerencia
+                    ? 'ng-invalid ng-dirty' : ''}}"
+            ></p-dropdown>
+            <small class="p-error" *ngIf="flagSumbit && !form_cierre_model_gerencia">Campo requerido.</small>
+        </div>
+        <div class="field col-6">
+            <label>Cedi</label>
+            <p-dropdown
+                [options]="form_cierre_option_cedi"
+                optionLabel="d"
+                [(ngModel)]="form_cierre_model_cedi"
+                optionValue="i"
+                placeholder="Selecciona Cedi"
+                appendTo="body"
+                [disabled]="form_cierre_model_gerencia &&
+                form_cierre_model_gerencia != -1 ? false : true"
+                class="{{flagSumbit && !form_cierre_model_cedi
+                ? 'ng-invalid ng-dirty' : ''}}"
+            ></p-dropdown>
+            <small class="p-error" *ngIf="flagSumbit && !form_cierre_model_cedi">Campo requerido.</small>
+        </div>
+        <div class="field col-6">
+            <label>Archivo</label>
+            <p-fileUpload
+            name="frm_ini_xls"
+            mode="basic"
+            chooseLabel="Selecciona Archivo"
+            (onSelect)="onFileSelect($event.files[0])"
+                customUpload="false"
+                accept=".csv"
+            class="{{flagSumbit && !file
+                ? 'ng-invalid ng-dirty' : ''}}"
+            ></p-fileUpload>
+            <small class="p-error" *ngIf="flagSumbit && !file">Campo requerido.</small>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" [outlined]="true" severity="secondary"
+            (click)="modalCierreDia = false"
+        ></p-button>
+        <button
+            pButton label="Cargar" icon="pi pi-save"
+            (click)="getSubirSemanalFiltros()"
+        ></button>
+    </ng-template>
+  </p-dialog>
+<!--Cierre de Dia -->
+
+
+<!-- Pedir Contraseña -->
+<div class="col-12" *ngIf="modalTakePassword">
+    <app-c-dialog-pasword
+        [modalPasswordValidate]="modalTakePassword"
+        (closeModalEvent)="clouseModal($event)"
+        (successPasswordEvent)="getSuccesModal($event)"
+    >
+    </app-c-dialog-pasword>
+</div>
+
+<!-- Cambios Masivos -->
+<div class="col-12" *ngIf="modalCambiosMasivos && !modalTakePassword">
+    <app-c-dialog-massive-update
+        [modalCambiosMasivos]="modalCambiosMasivos"
+        [messageArray]="messagesMassiveFile"
+        [form_data_succes_masive]="form_data_succes_masive"
+        (flagClouseModalMassiveEvent)="clouseModalMassiveUploadFile($event)"
+        (flagSuccessMassiveFileEvent)="getSuccesMassiveModalUpload($event)"
+        (fileReturnMassiveEvent)="getFileMassiveData($event)"
+    >
+    </app-c-dialog-massive-update>
+</div>
+<!-- Cambios Masivos -->
+
+<!-- Eliminar Semanal -->
+<p-dialog [(visible)]="modalEliminarSemanal" *ngIf="modalEliminarSemanal && !modalTakePassword"
+    [style]="{ width: '300px' }" [modal]="true" class="p-fluid">
+    <p-header>
+      <i class="pi pi-lock font-bold mr-2" style="font-size: 1.2rem"></i>
+      <span>Eliminar Semanal</span>
+    </p-header>
+    <ng-template pTemplate="content">
+        <p-messages [(value)]="messagesEliminarSemanal" [enableService]="false" [closable]="false"></p-messages>
+        <div class="p-fluid p-formgrid grid font-bold">
+            <div class="field col-12">
+                <label>Region</label>
+                <p-dropdown
+                    [options]="form_eliminar_semanal_option_region"
+                    optionLabel="d"
+                    [(ngModel)]="form_eliminar_semanal_model_region"
+                    optionValue="i"
+                    placeholder="Selecciona Region"
+                    appendTo="body"
+                    (onChange)="selectedComboEliminarS(0)"
+                    class="{{flagSumbitEliminar && !form_eliminar_semanal_model_region
+                    ? 'ng-invalid ng-dirty' : ''}}"
+                ></p-dropdown>
+                <small class="p-error" *ngIf="flagSumbitEliminar && !form_eliminar_semanal_model_region">Campo requerido.</small>
+            </div>
+            <div class="field col-12">
+                <label>Gerencia</label>
+                <p-dropdown
+                    [options]="form_eliminar_semanal_option_gerencia"
+                    optionLabel="d"
+                    [(ngModel)]="form_eliminar_semanal_model_gerencia"
+                    optionValue="i"
+                    placeholder="Selecciona Gerencia"
+                    appendTo="body"
+                    [disabled]="form_eliminar_semanal_model_region ? false : true"
+                    (onChange)="selectedComboEliminarS(1)"
+                    class="{{flagSumbitEliminar && !form_eliminar_semanal_model_gerencia
+                        ? 'ng-invalid ng-dirty' : ''}}"
+                ></p-dropdown>
+                <small class="p-error" *ngIf="flagSumbitEliminar && !form_eliminar_semanal_model_gerencia">Campo requerido.</small>
+            </div>
+            <div class="field col-12">
+                <label>Cedi</label>
+                <p-dropdown
+                    [options]="form_eliminar_semanal_option_cedi"
+                    optionLabel="d"
+                    [(ngModel)]="form_eliminar_semanal_model_cedi"
+                    optionValue="i"
+                    placeholder="Selecciona Cedi"
+                    appendTo="body"
+                    [disabled]="form_eliminar_semanal_model_gerencia &&
+                    form_eliminar_semanal_model_gerencia != -1 ? false : true"
+                    class="{{flagSumbitEliminar && !form_eliminar_semanal_model_cedi
+                    ? 'ng-invalid ng-dirty' : ''}}"
+                ></p-dropdown>
+                <small class="p-error" *ngIf="flagSumbitEliminar && !form_eliminar_semanal_model_cedi">Campo requerido.</small>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" [outlined]="true" severity="secondary"
+            (click)="modalEliminarSemanal = false"
+        ></p-button>
+        <button
+            pButton label="Eliminar" icon="pi pi-save"
+            (click)="runEliminarSemanal()"
+        ></button>
+    </ng-template>
+  </p-dialog>
+<!-- Eliminar semanal -->
+
+
+<!-- Subir csv -->
+<p-dialog [(visible)]="modalProgress" 
+    [style]="{ width: '300px' }" [modal]="true" class="p-fluid">
+    <p-header>
+      <i class="pi pi-cloud-upload font-bold mr-2" style="font-size: 1.2rem"></i>
+      <span>Cargando Informacion...</span>
+    </p-header>
+    <ng-template pTemplate="content">
+
+        <label>{{msg_accion_modal}}</label>
+
+    </ng-template>
+</p-dialog>
+  <!-- Subir csv -->
+
+
+

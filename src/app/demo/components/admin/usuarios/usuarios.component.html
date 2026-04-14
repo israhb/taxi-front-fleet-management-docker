@@ -1,0 +1,329 @@
+<p-toast></p-toast>
+<app-spinner></app-spinner>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <!-- data exported to excel -->
+            <p-table
+                #dt
+                [value]="usuarios"
+                dataKey="numeracion"  selectionMode="multiple" [resizableColumns]="true"
+                [tableStyle]="{ 'min-width': '20rem' }"
+                selectionMode="single" [(selection)]="selectUsuarios"
+                (onRowSelect)="onRowSelect($event)"
+                styleClass="p-datatable-gridlines p-datatable-sm"
+            >
+                <ng-template pTemplate="caption">
+                    <div>
+                        <div class="flex flex-wrap">
+                            <div class="flex flex-column md:flex-row md:justify-content-start md:align-items-center  mr-2">
+                                <button pButton pRipple label="" pTooltip="Agregar"
+                                    icon="pi pi-plus" class="p-button-success"
+                                    (click)="abrirModalAddUpdate({}, false)"
+                                ></button>
+                            </div>
+                            <div
+                                class="flex flex-column md:flex-row md:justify-content-start md:align-items-center  mr-2">
+                                <p-button
+                                    label="" icon="pi pi-pencil" pTooltip="Editar"
+                                    (click)="abrirModalAddUpdate(usuario, true)"
+                                ></p-button>
+                            </div>
+                            <div
+                                class="flex flex-column md:flex-row md:justify-content-start md:align-items-center  mr-2">
+                                <button
+                                    pButton pRipple  label="" pTooltip="Eliminar"
+                                    icon="pi pi-trash" class="p-button-danger"
+                                    (click)="deleteRegister()"
+                                ></button>
+                            </div>
+                            <p-divider layout="vertical"></p-divider>
+                            <div
+                                class="flex flex-column md:flex-row md:justify-content-start md:align-items-center  mr-2">
+                                <p-button
+                                    label="L. Diaria" pTooltip="Layout Diaria"
+                                    (click)="getLayout(1)"
+                                ></p-button>
+                            </div>
+                            <div
+                                class="flex flex-column md:flex-row md:justify-content-start md:align-items-center  mr-2">
+                                <p-button
+                                    label="L. Semanal" pTooltip="Layout Semanal"
+                                    (click)="getLayout(2)"
+                                ></p-button>
+                            </div>
+                            <div
+                                class="flex flex-column md:flex-row md:justify-content-start md:align-items-center  mr-2">
+                                <p-button
+                                    label="D. Usuarios" pTooltip="Descargar Todos los Usuarios"
+                                    (click)="getLayout(3)"
+                                ></p-button>
+                            </div>
+                            <p-divider layout="vertical"></p-divider>
+                            <div
+                                class="flex flex-column md:flex-row md:justify-content-start md:align-items-center  mr-2">
+                                <button
+                                    pButton pRipple label="Carga Masiva Usuarios"
+                                    icon="pi pi-plus" class="p-button-warning"
+                                    (click)="openCargarGrupos(1)"
+                                ></button>
+                            </div>
+                            <div
+                                class="flex flex-column md:flex-row md:justify-content-start md:align-items-center  mr-2">
+                                <button
+                                    pButton pRipple label="Cambios Masivos Usuarios"
+                                    icon="pi pi-pencil" class="p-button-warning"
+                                    (click)="openCargarGrupos(2)"
+                                ></button>
+                            </div>
+                            <p-divider layout="vertical"></p-divider>
+                            <div class="flex flex-column mr-1">
+                                <label>Buscar por User name</label>
+                                <input type="text" [(ngModel)]="filter_model_data_nombre" pInputText />
+                            </div>
+                            <div class="flex flex-column md:flex-row md:justify-content-start md:align-items-center mr-2">
+                                <p-button
+                                    label="Buscar"  (click)="refreshTable()" icon="pi pi-search"
+                                ></p-button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr class="text-sm">
+                        <th>#</th>
+                        <th>User Id</th>
+                        <th >User Name</th>
+                        <th >Cedi Asignado</th>
+                        <th >Ruta</th>
+                        <th >Password</th>
+                        <th >Nombre Completo</th>
+                        <th ># Empleado</th>
+                        <th >Tipo</th>
+                        <th >Sexo</th>
+                        <th >Creado Por</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-usuario >
+                    <tr class="text-sm"  [pSelectableRow]="usuario">
+                        <td>
+                            {{usuario.numeracion}}
+                        </td>
+                        <td>
+                            {{usuario.user_id}}
+                        </td>
+                        <td>
+                            {{usuario.user_username}}
+                        </td>
+                        <td>
+                            {{usuario.user_cds_temp}}
+                        </td>
+                        <td>
+                            {{usuario.user_rt}}
+                        </td>
+                        <td>
+                            {{usuario.user_password}}
+                        </td>
+                        <td>
+                            {{usuario.user_nombre_completo}}
+                        </td>
+                        <td>
+                            {{usuario.user_numero_empleado}}
+                        </td>
+                        <td>
+                            {{usuario.user_level}}
+                        </td>
+                        <td>
+                            {{usuario.user_sexo}}
+                        </td>
+                        <td>
+                            {{usuario.user_create_user_id}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div class="flex justify-content-start">
+                <div class="col-2">
+                    <button pButton icon="pi pi-refresh"
+                    styleClass="p-button-sm" class="p-button-help p-button-sm"
+                        pTooltip="Refresh"  (click)="refreshTable()"
+                        ooltipPosition="bottom">
+                    </button>
+                </div>
+                <p-paginator
+                    (onPageChange)="onPageChange($event)"
+                    [showCurrentPageReport]="true"
+                    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+                    [first]="first" [rows]="rows"
+                    [totalRecords]="totalRecords" [rows]="15"
+                    [rowsPerPageOptions]="[15, 20, 30, 40, 50, 100]"
+                ></p-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+<!-------------------------------------------------- disalbed users ----------------------------------------->
+<p-dialog [(visible)]="dialogDelete" header="Eliminar Usuario" [modal]="true" [style]="{width:'400px'}">
+    <div class="mt-2 md:mt-0">
+        <span *ngIf="usuario">¿Deceas eliminar al usuario: {{usuario.user_nombre_completo}}?</span>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton label="Cancelar" class="p-button-close" (click)="clouseDialogs()"></button>
+        <button pButton label="Eliminar" class="p-button-danger" (click)="getDeleteUser()"></button>
+    </ng-template>
+</p-dialog>
+<!--cargar usuarios masivos -->
+<div class="col-12" *ngIf="modalCargarUsuariosM">
+    <app-c-dialog-upload-file
+        [modalUploadFile]="modalCargarUsuariosM"
+        [model_data_title]="'Cargar Usuarios Masivos'"
+        [messageArray]="messages"
+        (flagClouseModalEvent)="clouseModalUploadFile($event)"
+        (flagSuccessFileEvent)="getSuccesModalUpload($event)"
+        (fileReturnEvent)="getFileData($event)"
+    >
+    </app-c-dialog-upload-file>
+</div>
+<!--cambios masivos usuarios -->
+<div class="col-12" *ngIf="modalCambiosMasivosUsuarios">
+    <app-c-dialog-upload-file
+        [modalUploadFile]="modalCambiosMasivosUsuarios"
+        [model_data_title]="'Cambios Masivos Usuarios'"
+        [messageArray]="messages"
+        (flagClouseModalEvent)="clouseModalUploadFile($event)"
+        (flagSuccessFileEvent)="getSuccesModalUploadMassive($event)"
+        (fileReturnEvent)="getFileData($event)"
+    >
+    </app-c-dialog-upload-file>
+</div>
+<!-- Cierre de Dia -->
+<p-dialog [(visible)]="modalAgregarUpdate" [style]="{ width: '370px' }"
+    [modal]="true" class="p-fluid">
+    <p-header>
+      <i class="pi pi-plus font-bold mr-2" style="font-size: 1.2rem"></i>
+      <span>{{flagAddUpdate ? 'Actualiza' : 'Agregar'}} Usuario</span>
+    </p-header>
+    <ng-template pTemplate="content">
+        <!-- <p-messages [(value)]="messagesCierre" [enableService]="false" [closable]="false"></p-messages> -->
+      <div class="p-fluid p-formgrid grid font-bold">
+        <div class="field col-6">
+            <label>UserName</label>
+            <input type="text" [(ngModel)]="form_cierre_model_user"
+            placeholder="Ingresa Usuario"
+            [disabled]="flagAddUpdate"
+            class="{{flagSumbit && !form_cierre_model_user
+                ? 'ng-invalid ng-dirty' : ''}}"
+            pInputText/>
+            <small class="p-error" *ngIf="flagSumbit && !form_cierre_model_user">Campo requerido.</small>
+        </div>
+        <div class="field col-6">
+            <label>Password</label>
+            <input type="text" [(ngModel)]="form_cierre_model_password"
+            placeholder="Ingresa Contraseña"
+            class="{{flagSumbit && !form_cierre_model_password
+                ? 'ng-invalid ng-dirty' : ''}}"
+            pInputText/>
+            <small class="p-error" *ngIf="flagSumbit && !form_cierre_model_password">Campo requerido.</small>
+        </div>
+        <div class="field col-6">
+            <label>Nombre Completo</label>
+            <input type="text" [(ngModel)]="form_cierre_model_nombre"
+            placeholder="Ingresa Nombre" [disabled]="flagAddUpdate"
+            class="{{flagSumbit && !form_cierre_model_nombre
+                ? 'ng-invalid ng-dirty' : ''}}"
+            pInputText/>
+            <small class="p-error" *ngIf="flagSumbit && !form_cierre_model_nombre">Campo requerido.</small>
+        </div>
+        <div class="field col-6">
+            <label># Empleado</label>
+            <input type="text" [(ngModel)]="form_cierre_model_numero_empleado"
+            placeholder="Ingresa Numero de Empleado"
+            class="{{flagSumbit && !form_cierre_model_numero_empleado
+                ? 'ng-invalid ng-dirty' : ''}}"
+            pInputText/>
+            <small class="p-error" *ngIf="flagSumbit && !form_cierre_model_numero_empleado">Campo requerido.</small>
+        </div>
+        <div class="field col-6">
+            <label>Sexo</label>
+            <p-dropdown
+                [options]="form_cierre_option_sexo"
+                optionLabel="d"
+                [disabled]="flagAddUpdate"
+                [(ngModel)]="form_cierre_model_sexo"
+                optionValue="i"
+                placeholder="Selecciona Sexo"
+                appendTo="body"
+                class="{{flagSumbit && (form_cierre_model_sexo != 0 && form_cierre_model_sexo != 1)
+                ? 'ng-invalid ng-dirty' : ''}}"
+            ></p-dropdown>
+            <small class="p-error" *ngIf="flagSumbit &&
+             (form_cierre_model_sexo != 0 && form_cierre_model_sexo != 1)">Campo requerido.</small>
+        </div>
+        <div class="field col-6">
+            <label>Tipo</label>
+            <p-dropdown
+                [options]="form_cierre_option_tipo"
+                optionLabel="d"
+                [(ngModel)]="form_cierre_model_tipo"
+                optionValue="i"
+                placeholder="Selecciona Tipo"
+                appendTo="body"
+                class="{{flagSumbit && !form_cierre_model_tipo
+                ? 'ng-invalid ng-dirty' : ''}}"
+            ></p-dropdown>
+            <small class="p-error" *ngIf="flagSumbit && !form_cierre_model_tipo">Campo requerido.</small>
+        </div>
+        <div class="field col-6">
+            <label>Region</label>
+            <p-dropdown
+                [options]="form_cierre_option_region"
+                optionLabel="d"
+                [(ngModel)]="form_cierre_model_region"
+                optionValue="i"
+                placeholder="Selecciona Region"
+                appendTo="body"
+                (onChange)="selectedComboCierre(0)"
+                class="{{flagSumbit && !form_cierre_model_region
+                ? 'ng-invalid ng-dirty' : ''}}"
+            ></p-dropdown>
+            <small class="p-error" *ngIf="flagSumbit && !form_cierre_model_region">Campo requerido.</small>
+        </div>
+        <div class="field col-6">
+            <label>Gerencia</label>
+            <p-dropdown
+                [options]="form_cierre_option_gerencia"
+                optionLabel="d"
+                [(ngModel)]="form_cierre_model_gerencia"
+                optionValue="i"
+                placeholder="Selecciona Gerencia"
+                appendTo="body"
+                [disabled]="form_cierre_model_region && form_cierre_model_region != -1 ? false : true"
+                (onChange)="selectedComboCierre(1)"
+            ></p-dropdown>
+        </div>
+        <div class="field col-12">
+            <label>Cedi</label>
+            <p-dropdown
+                [options]="form_cierre_option_cedi"
+                optionLabel="d"
+                [(ngModel)]="form_cierre_model_cedi"
+                optionValue="i"
+                placeholder="Selecciona Cedi"
+                appendTo="body"
+                [disabled]="form_cierre_model_gerencia &&
+                form_cierre_model_gerencia != -1 ? false : true"
+            ></p-dropdown>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" [outlined]="true" severity="secondary"
+            (click)="resetFields()"
+        ></p-button>
+        <button
+            pButton label="Guardar" icon="pi pi-save"
+            (click)="guardarDatos()"
+        ></button>
+    </ng-template>
+  </p-dialog>
+<!--Cierre de Dia -->

@@ -1,0 +1,32 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo">
+        <img
+        src="https://c2.tmsglobal.com.mx/site/transformacion/img/header.jpg" >
+        <!-- <span></span> -->
+    </a>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button"
+        (click)="layoutService.onMenuToggle()" [pTooltip]="'Menú'" >
+        <i class="pi pi-bars"></i>
+    </button>
+
+    <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button" (click)="layoutService.showProfileSidebar()">
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+        <button class="p-link layout-topbar-button">
+
+            <div class="mx-2">
+                <label>{{usuario}}</label>
+            </div>
+        </button>
+        <button class="p-link layout-topbar-button"
+            tooltipPosition="bottom" pTooltip="Cerrar Sesión"
+            (click)="cerrarSesion()"
+        >
+            <i class="pi pi-sign-out"></i>
+            <span>Cerrar Sesion</span>
+        </button>
+    </div>
+</div>

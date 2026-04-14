@@ -1,0 +1,296 @@
+<p-toast></p-toast>
+<app-spinner></app-spinner>
+<div class="grid">
+    <div class="col-12">
+        <div >
+            <p-toolbar>
+                <div class="card col-12">
+                    <div class="flex flex-wrap">
+                        <div class="flex flex-column mr-1">
+                            <label>Region</label>
+                            <p-dropdown
+                                [options]="form_filterG_option_region"
+                                optionLabel="d"
+                                [(ngModel)]="form_filterG_model_region"
+                                optionValue="i"
+                                placeholder="Selecciona Region"
+                                appendTo="body"
+                                (onChange)="selectedCombo(0)"
+
+                            ></p-dropdown>
+                        </div>
+                        <div class="flex flex-column mr-1">
+                            <label>Gerencia</label>
+                            <p-multiSelect
+                                [options]="form_filterG_option_gerencia"
+                                optionLabel="d"
+                                [(ngModel)]="form_filterG_model_gerencia"
+                                optionValue="i"
+                                placeholder="Selecciona Gerencia"
+                                appendTo="body"
+                                [disabled]="form_filterG_model_region ? false : true"
+                                (onChange)="selectedCombo(1)"
+
+                            ></p-multiSelect>
+                        </div>
+                        <div class="flex flex-column mr-1">
+                            <label>Cedis</label>
+                            <p-dropdown
+                                [options]="form_filterG_option_cedi"
+                                optionLabel="d"
+                                [(ngModel)]="form_filterG_model_cedi"
+                                optionValue="i"
+                                placeholder="Selecciona Cedi"
+                                appendTo="body"
+                                [disabled]="form_filterG_model_gerencia &&
+                                form_filterG_model_gerencia.length == 1 ? false : true"
+                                (onChange)="selectedCombo(2)"
+
+                            ></p-dropdown>
+                        </div>
+                        <div class="flex flex-column mr-1">
+                            <label>Negociador</label>
+                            <p-dropdown
+                                [options]="form_filterG_option_negociador"
+                                optionLabel="d"
+                                [(ngModel)]="form_filterG_model_negociador"
+                                optionValue="i"
+                                placeholder="Selecciona Negociador"
+                                appendTo="body"
+                                [filter]="true" filterBy="d"
+                                [disabled]="form_filterG_model_cedi &&
+                                form_filterG_model_cedi != -1 ? false : true"
+                            ></p-dropdown>
+                        </div>
+                        <div class="flex flex-column mr-1">
+                            <label>Fecha</label>
+                            <p-calendar appendTo="body"
+                                style="width: 80px;"
+                                dateFormat="yy-mm-dd"
+                                [panelStyle]="{'width':'25%'}"
+                                [showButtonBar]="true"
+                                    [(ngModel)]="form_filterG_model_fecha_de"
+                            ></p-calendar>
+                        </div>
+                        <!-- <div class="flex flex-column mr-1">
+                            <label>A</label>
+                            <p-calendar appendTo="body"
+                                style="width: 80px;"
+                                dateFormat="yy-mm-dd"
+                                [panelStyle]="{'width':'25%'}"
+                                [showButtonBar]="true"
+                                    [(ngModel)]="form_filterG_model_fecha_a"
+                            ></p-calendar>
+                        </div> -->
+                        <div class="flex flex-column md:flex-row md:justify-content-start md:align-items-center mr-1">
+                            <p-button
+                                label="Filtrar" icon="pi pi-filter"
+                                (onClick)="runFilterGeneric()"
+                            ></p-button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Logica para tener tabviews controlados -->
+                 <div class="card p-fluid grid font-bold col-12">
+                    <div class="field col-12">
+                        <p-tabView  [(activeIndex)]="activeIndex" (onChange)="onTabChange($event)">
+                            <p-tabPanel header="Por Estatus">
+                                <p-table
+                                    [value]="data_reporte_ruta"
+                                    [resizableColumns]="true"
+                                    [tableStyle]="{ 'min-width': '20rem' }"
+                                    styleClass="p-datatable-gridlines p-datatable-sm"
+                                >
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Promotoras</th>
+                                            <th>Dias</th>
+
+                                            <th>Hora inicial</th>
+                                            <th>Hora final</th>
+                                            <th>Tiempo en mercadeo</th>
+                                            <th>Primer cliente calidad</th>
+                                            <th>Visitados</th>
+                                            <th>Prom. por dia</th>
+                                            <th>Abiertos</th>
+                                            <th>% Abiertos</th>
+                                            <th>Potenciales</th>
+                                            <th>% Potenciales</th>
+                                            <th>Activados</th>
+                                            <th>% Activados</th>
+                                            <th>Productividad</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-data>
+                                        <tr>
+                                            <td>{{data.row_name}}</td>
+                                            <td>{{data.promo}}</td>
+                                            <td>{{data.dias}}</td>
+                                            <td>{{data.primero}}</td>
+                                            <td>{{data.ultimo}}</td>
+                                            <td>{{data.diferencia}}</td>
+                                            <td>{{data.primer_p}}</td>
+                                            <td>{{data.h_vis}}</td>
+                                            <td>{{data.h_vis_d}}</td>
+                                            <td>{{data.h_abr}}</td>
+                                            <td>{{data.h_abr_p}}</td>
+                                            <td>{{data.h_s}}</td>
+                                            <td>{{data.h_sp}}</td>
+                                            <td>{{data.h_act}}</td>
+                                            <td>{{data.efect_p}}</td>
+                                            <td>{{data.pro_dia}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                                    
+                            </p-tabPanel>
+                            <p-tabPanel header="Por Hora">
+                                <p-table
+                                    [value]="data_reporte_por_hora"
+                                    [resizableColumns]="true"
+                                    [tableStyle]="{ 'min-width': '20rem' }"
+                                    styleClass="p-datatable-gridlines p-datatable-sm"
+                                >
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Negociador</th>
+                                            <th>8 am</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th>9 am</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th>10 am</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th>11 am</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th>12 am</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th>1 pm</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th>2 pm</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th>3 pm</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th>4 pm</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th>5 pm</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th>6 pm</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th>Despues de 6 pm</th>
+                                            <!-- <th>Tocados</th> -->
+                                            <th class="columna-color">Validados</th>
+                                            <th class="columna-val">Total Tocados</th>
+                                            <th class="columna-val">Total Validados</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-data_1>
+                                        <tr>
+                                            <td>{{data_1.row_name}}</td>
+                                            <td>{{data_1.ocho}}</td>
+                                            <!-- <td>{{data_1.ocho_t}}</td> -->
+                                            <td class="columna-color">{{data_1.ocho_v}}</td>
+                                            
+                                            <td>{{data_1.nueve}}</td>
+                                            <!-- <td>{{data_1.nueve_t}}</td> -->
+                                            <td class="columna-color">{{data_1.nueve_v}}</td>
+
+                                            <td>{{data_1.diez}}</td>
+                                            <!-- <td>{{data_1.diez_t}}</td> -->
+                                            <td class="columna-color">{{data_1.diez_v}}</td>
+
+
+                                            <td>{{data_1.once}}</td>
+                                            <!-- <td>{{data_1.once_t}}</td> -->
+                                            <td class="columna-color">{{data_1.once_v}}</td>
+
+                                            <td>{{data_1.doce}}</td>
+                                            <!-- <td>{{data_1.doce_t}}</td> -->
+                                            <td class="columna-color">{{data_1.doce_v}}</td>
+
+                                            <td>{{data_1.una}}</td>
+                                            <!-- <td>{{data_1.una_t}}</td> -->
+                                            <td class="columna-color">{{data_1.una_v}}</td>
+
+                                            <td>{{data_1.dos}}</td>
+                                            <!-- <td>{{data_1.dos_t}}</td> -->
+                                            <td class="columna-color">{{data_1.dos_v}}</td>
+
+                                            <td>{{data_1.tres}}</td>
+                                            <!-- <td>{{data_1.tres_t}}</td> -->
+                                            <td class="columna-color">{{data_1.tres_v}}</td>
+
+                                            <td>{{data_1.cuatro}}</td>
+                                            <!-- <td>{{data_1.cuatro_t}}</td> -->
+                                            <td class="columna-color">{{data_1.cuatro_v}}</td>
+
+                                            <td>{{data_1.cinco}}</td>
+                                            <!-- <td>{{data_1.cinco_t}}</td> -->
+                                            <td class="columna-color">{{data_1.cinco_v}}</td>
+
+                                            <td>{{data_1.seis}}</td>
+                                            <!-- <td>{{data_1.seis_t}}</td> -->
+                                            <td class="columna-color">{{data_1.seis_v}}</td>
+
+                                            <td>{{data_1.despues_seis}}</td>
+                                            <!-- <td>{{data_1.despues_seis_t}}</td> -->
+                                            <td class="columna-color">{{data_1.despues_seis_v}}</td>
+                                            <td class="columna-val">{{data_1.total_t}}</td>
+                                            <td class="columna-val">{{data_1.total_v}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </p-tabPanel>
+                            <p-tabPanel header="Por Fecha">
+                                <p-table
+                                    [value]="data_reporte_fecha"
+                                    [resizableColumns]="true"
+                                    [tableStyle]="{ 'min-width': '20rem' }"
+                                    styleClass="p-datatable-gridlines p-datatable-sm"
+                                >
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Visitados</th>
+                                            <th>Abiertos</th>
+                                            <th>% Abiertos</th>
+                                            <th>Potenciales</th>
+                                            <th>% Potenciales</th>
+                                            <th>Activados</th>
+                                            <th>% Activados</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-data_1>
+                                        <tr>
+                                            <td>{{data_1.row_name}}</td>
+                                            <td>{{data_1.h_vis}}</td>
+                                            <td>{{data_1.h_abr}}</td>
+                                            <td>{{data_1.h_abr_p}}</td>
+                                            <td>{{data_1.h_s}}</td>
+                                            <td>{{data_1.h_sp}}</td>
+                                            <td>{{data_1.h_act}}</td>
+                                            <td>{{data_1.efect_p}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </p-tabPanel>
+                        </p-tabView>
+
+                    </div>
+                 </div>
+               
+            </p-toolbar>
+        </div>
+    </div>
+</div>

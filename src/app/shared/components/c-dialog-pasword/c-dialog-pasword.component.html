@@ -1,0 +1,30 @@
+<!-- Pedir Contraseña -->
+<p-dialog [(visible)]="modalPasswordValidate"
+    [style]="{ width: '300px' }" [modal]="true" class="p-fluid">
+    <p-header>
+      <i class="pi pi-lock font-bold mr-2" style="font-size: 1.2rem"></i>
+      <span>Contraseña de Seguridad</span>
+    </p-header>
+    <ng-template pTemplate="content">
+        <p-messages [(value)]="messagesPassword"
+            [enableService]="false" [closable]="false"></p-messages>
+
+        <div class="p-fluid p-formgrid grid font-bold">
+            <div class="field col-12">
+                <label>Ingresa la contraseña</label>
+                <input type="text" pInputText [(ngModel)]="form_get_password" />
+            </div>
+        </div>
+
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" [outlined]="true" severity="secondary"
+            (click)="clouseModal()"
+        ></p-button>
+        <button
+            pButton label="OK" icon="pi pi-save"
+            (click)="getValidarPassword()"
+        ></button>
+    </ng-template>
+  </p-dialog>
+<!-- Pedir Contraseña -->
